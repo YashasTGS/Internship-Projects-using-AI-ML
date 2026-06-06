@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Smart Fertilizer Recommendation using AI</title>
+
+<style>
+body {
+    margin: 0;
+    font-family: 'Segoe UI', sans-serif;
+    background: linear-gradient(rgba(10,10,30,0.85), rgba(10,10,30,0.95)),
+                url('https://images.unsplash.com/photo-1501004318641-b39e6451bec6');
+    background-size: cover;
+    color: #fff;
+}
+
+/* ===== MAIN CONTAINER ===== */
+.container {
+    width: 900px;
+    margin: 40px auto;
+}
+
+/* ===== TITLE ===== */
+h2 {
+    text-align: center;
+    color: #00e6e6;
+    margin-bottom: 20px;
+}
+
+/* ===== GRID LAYOUT ===== */
+.grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+}
+
+/* ===== CARD DESIGN ===== */
+.card {
+    background: rgba(255,255,255,0.05);
+    backdrop-filter: blur(10px);
+    border-radius: 15px;
+    padding: 20px;
+    box-shadow: 0 0 15px rgba(0,255,255,0.2);
+}
+
+/* ===== INPUT FIELDS ===== */
+input {
+    width: 100%;
+    padding: 10px;
+    margin-top: 5px;
+    margin-bottom: 12px;
+    border-radius: 8px;
+    border: none;
+    outline: none;
+    background: #1c1c2e;
+    color: #fff;
+}
+
+input:focus {
+    border: 1px solid #00e6e6;
+    box-shadow: 0 0 5px #00e6e6;
+}
+
+/* ===== BUTTON ===== */
+button {
+    width: 100%;
+    padding: 12px;
+    background: linear-gradient(45deg, #00e6e6, #007bff);
+    border: none;
+    border-radius: 10px;
+    font-size: 16px;
+    color: white;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+button:hover {
+    transform: scale(1.05);
+}
+
+/* ===== RESULT CARD ===== */
+.result-card {
+    margin-top: 20px;
+    background: rgba(0,255,255,0.08);
+    border-left: 5px solid #00e6e6;
+    padding: 20px;
+    border-radius: 12px;
+}
+
+/* ===== SECTION ===== */
+.section {
+    margin-top: 15px;
+    padding: 15px;
+    background: rgba(255,255,255,0.04);
+    border-radius: 10px;
+}
+
+/* ===== LIST STYLE ===== */
+ul {
+    padding-left: 20px;
+}
+
+li {
+    margin-bottom: 5px;
+}
+
+/* ===== ERROR ===== */
+.error {
+    margin-top: 20px;
+    padding: 15px;
+    background: rgba(255,0,0,0.1);
+    border-left: 5px solid red;
+    border-radius: 10px;
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 768px) {
+    .container {
+        width: 90%;
+    }
+
+    .grid {
+        grid-template-columns: 1fr;
+    }
+}
+</style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+<h2>🌱 Smart Fertilizer Recommendation using AI</h2>
+
+<form method="post">
+{% csrf_token %}
+
+<div class="grid">
+
+    <!-- LEFT CARD -->
+    <div class="card">
+        <h3>🌍 Soil Information</h3>
+
+        <input name="soil_type" placeholder="Soil Type">
+        <input name="soil_ph" placeholder="Soil pH">
+        <input name="soil_moisture" placeholder="Soil Moisture">
+
+        <input name="nitrogen" placeholder="Nitrogen Level">
+        <input name="phosphorus" placeholder="Phosphorus Level">
+        <input name="potassium" placeholder="Potassium Level">
+    </div>
+
+    <!-- RIGHT CARD -->
+    <div class="card">
+        <h3>🌦 Environment & Crop</h3>
+
+        <input name="temperature" placeholder="Temperature">
+        <input name="humidity" placeholder="Humidity">
+        <input name="crop_type" placeholder="Crop Type">
+    </div>
+
+</div>
+
+<br>
+
+<button type="submit">🚀 Predict Fertilizer</button>
+
+</form>
+
+<!-- ===== RESULT SECTION ===== -->
+{% if result %}
+<div class="result-card">
+    <h2>✅ Recommended Fertilizer: {{ result }}</h2>
+    <p><strong>Confidence:</strong> {{ confidence }}%</p>
+</div>
+
+<div class="section">
+    <h4>📊 Input Summary</h4>
+    <ul>
+        {% for key, value in input_summary.items %}
+        <li>{{ key }} : {{ value }}</li>
+        {% endfor %}
+    </ul>
+</div>
+
+<div class="section">
+    <h4>💡 Smart Suggestions</h4>
+    <ul>
+        {% for tip in tips %}
+        <li>{{ tip }}</li>
+        {% endfor %}
+    </ul>
+</div>
+{% endif %}
+
+<!-- ===== ERROR ===== -->
+{% if error %}
+<div class="error">
+    ⚠ {{ error }}
+</div>
+{% endif %}
+
+</div>
+<a href="{% url 'dashboard' %}" 
+   style="position: fixed; top: 20px; left: 20px; 
+          background: linear-gradient(45deg, #00e6e6, #007bff); 
+          color: white; padding: 10px 18px; 
+          border-radius: 8px; text-decoration: none; 
+          font-size: 14px; box-shadow: 0 0 10px rgba(0,255,255,0.5);">
+   ⬅ Back to Dashboard
+</a>
+</body>
+</html>

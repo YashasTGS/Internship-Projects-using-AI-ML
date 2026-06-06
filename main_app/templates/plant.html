@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Plant communication classification using machine learning</title>
+
+<style>
+body {
+    margin: 0;
+    font-family: 'Segoe UI', sans-serif;
+    background: linear-gradient(rgba(10,10,30,0.85), rgba(10,10,30,0.95)),
+                url('https://images.unsplash.com/photo-1501004318641-b39e6451bec6');
+    background-size: cover;
+    color: white;
+}
+
+.container {
+    width: 1000px;
+    margin: 30px auto;
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+}
+
+.card {
+    background: rgba(255,255,255,0.05);
+    padding: 20px;
+    border-radius: 15px;
+    backdrop-filter: blur(10px);
+}
+
+input {
+    width: 100%;
+    padding: 10px;
+    margin: 8px 0;
+    border-radius: 8px;
+    border: none;
+    background: #1c1c2e;
+    color: white;
+}
+
+button {
+    width: 100%;
+    padding: 12px;
+    background: linear-gradient(45deg, #00e6e6, #007bff);
+    border: none;
+    border-radius: 10px;
+    color: white;
+}
+
+.result {
+    margin-top: 20px;
+    padding: 20px;
+    border-left: 5px solid #00e6e6;
+    background: rgba(0,255,255,0.08);
+}
+
+table {
+    width: 100%;
+    margin-top: 10px;
+}
+
+th, td {
+    padding: 10px;
+    text-align: center;
+}
+
+th {
+    background: #00e6e6;
+    color: black;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<h2 style="text-align:center;">🌱 Plant communication classification using machine learning </h2>
+
+<form method="post">
+{% csrf_token %}
+
+<div class="grid">
+
+<div class="card">
+<input name="vibration" placeholder="Leaf Vibration">
+<input name="scent" placeholder="Pollen Scent">
+<input name="light" placeholder="Light Intensity">
+<input name="root" placeholder="Root Signal">
+<input name="growth" placeholder="Growth Rate">
+</div>
+
+<div class="card">
+<input name="temp" placeholder="Temperature">
+<input name="moisture" placeholder="Moisture">
+<input name="sunlight" placeholder="Sunlight">
+<input name="fungus" placeholder="Fungus (0/1)">
+</div>
+
+</div>
+
+<br>
+<button type="submit">Predict</button>
+
+</form>
+
+{% if result %}
+<div class="result">
+<h2>Prediction: {{ result }}</h2>
+<p>Best Model: {{ best_model }}</p>
+<p>Accuracy: {{ accuracy }}%</p>
+
+{% if confidence %}
+<p>Confidence: {{ confidence }}%</p>
+{% endif %}
+</div>
+
+<div class="card">
+<h3>Input Summary</h3>
+<ul>
+{% for key, value in input_summary.items %}
+<li>{{ key }} → {{ value }}</li>
+{% endfor %}
+</ul>
+</div>
+
+<div class="card">
+<h3>Model Comparison</h3>
+<table>
+<tr><th>Model</th><th>Accuracy</th></tr>
+{% for model, acc in model_results.items %}
+<tr><td>{{ model }}</td><td>{{ acc }}%</td></tr>
+{% endfor %}
+</table>
+</div>
+{% endif %}
+
+{% if error %}
+<p style="color:red;">{{ error }}</p>
+{% endif %}
+
+</div>
+<a href="{% url 'dashboard' %}" 
+   style="position: fixed; top: 20px; left: 20px; 
+          background: linear-gradient(45deg, #00e6e6, #007bff); 
+          color: white; padding: 10px 18px; 
+          border-radius: 8px; text-decoration: none; 
+          font-size: 14px; box-shadow: 0 0 10px rgba(0,255,255,0.5);">
+   ⬅ Back to Dashboard
+</a>
+</body>
+</html>
